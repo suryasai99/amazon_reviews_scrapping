@@ -72,7 +72,7 @@ def index():
                     "Rating": rating,
                     "Review_title": review_title,
                     "Review_date": review_date,
-                    "Comment": comment
+                    "Comments": comment
                     }
                 reviews.append(everything)
             lg.info(f"my final result{reviews}")
