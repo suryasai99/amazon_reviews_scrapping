@@ -66,6 +66,25 @@ def index():
                 except:
                     lg.info('comment')
                 
+                everything = {
+                    "product":search_string,
+                    "Name": name,
+                    "Rating": rating,
+                    "Review_title": review_title,
+                    "Review_date": review_date,
+                    "Comment": comment
+                    }
+                reviews.append(everything)
+            lg.info(f"my final result{reviews}")
+
+            return render_template('result.html', reviews=reviews[0:(len(reviews)-1)])
+        
+        except Exception as e:
+            lg.info(e)
+            return 'check your code'
+    else:
+        return render_template('index.html')
+                
                 
 
 
