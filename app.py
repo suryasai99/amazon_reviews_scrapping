@@ -5,6 +5,8 @@ from bs4 import BeautifulSoup as bs
 from urllib.request import urlopen as ureq
 import logging as lg
 import pymongo
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
 
 lg.basicConfig(level = lg.INFO, 
                filename = 'webscrap.log')
@@ -72,6 +74,14 @@ def index():
                     }
                 reviews.append(everything)
             lg.info(f"my final result{reviews}")
+
+            # connecting to a pymongo database
+            uri = "mongodb+srv://suryakadali1994:btbSZNLdUxGUmWMT@mydatabase.bzm4fk7.mongodb.net/?retryWrites=true&w=majority&appName=mydatabase"
+            # Create a new client and connect to the server
+            client = MongoClient(uri, server_api=ServerApi('1'))
+            db = client['amazon_reviews_scrapping']
+            collections = db['r_scrapping']
+            collections.insert_many(reviews)
 
             return render_template('result.html', reviews=reviews[0:(len(reviews))])
         
