@@ -21,16 +21,12 @@ def index():
         try:
             search_string = request.form['content'].replace(" ","")
             amazon_url = f"https://www.amazon.in/s?k={search_string}" 
-            am_html = bs(ureq(amazon_url).read(),
-                         'html.parser')
-            find_loc_link = am_html.find_all('div',
-                                             {"class":"sg-col-20-of-24 s-result-item s-asin sg-col-0-of-12 sg-col-16-of-20 sg-col s-widget-spacing-small sg-col-12-of-16"})
-            product_link = f"https://www.amazon.in/{find_loc_link[0].a['href']}"
-            
-            product_info = bs(requests.get(product_link).text,
-                              "html.parser")
-            full_info = product_info.find_all('div',
-                                              {"class":'a-section review aok-relative'})
+            am_html = bs(ureq(amazon_url).read(), 'html.parser')
+            find_loc_link = am_html.find_all("a",{"class":"a-link-normal s-no-outline"})
+            product_link = f"https://www.amazon.in/{find_loc_link[0]['href']}"
+            print(len(find_loc_link))
+            product_info = bs(ureq(product_link).read(), "html.parser")
+            full_info = product_info.find_all('div',{"class":'a-section review aok-relative'})
             
             reviews = []
             for i in full_info:
@@ -68,28 +64,23 @@ def index():
                 
                 everything = {
                     "product":search_string,
-                    "Name": name,
-                    "Rating": rating,
-                    "Review_title": review_title,
-                    "Review_date": review_date,
-                    "Comments": comment
+                    "name": name,
+                    "rating": rating,
+                    "review_title": review_title,
+                    "review_date": review_date,
+                    "comment": comment
                     }
                 reviews.append(everything)
             lg.info(f"my final result{reviews}")
 
-            return render_template('result.html', reviews=reviews[0:(len(reviews)-1)])
+            return render_template('result.html', reviews=reviews[0:(len(reviews))])
         
         except Exception as e:
             lg.info(e)
             return 'check your code'
     else:
         return render_template('index.html')
-                
-                
-
-
-
-
 
 if __name__ =="__main__":
+    
     app.run(host = "0.0.0.0",port=5070)

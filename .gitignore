@@ -1,6 +1,6 @@
 env_scrap/
 .ipynb_checkpoints/
-practising_scrapping.ipynb
+*.ipynb
 .DS_Store
 webscrap.log
 
